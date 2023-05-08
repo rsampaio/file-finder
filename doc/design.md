@@ -59,7 +59,9 @@ To display the results the program will have a dedicated function `store_result`
 
 Another aspect of the results is the ability of the `dumper` to aquire an exclusive lock to read the list, output each item preventing the addition of new results and emptying the list.
 
-A separated thread will be created to regularly dump the contents of the result data structure, this thread will flush the contents of the `std::vector` while holding the lock to prevent new additions to the list and reseting it at the end. This thread will aquire an `exclusive_lock` before performing the 3 steps.
+A separated thread will be created to regularly dump the contents of the result data structure, this thread will flush the contents of the `std::vector` while holding the lock to prevent new additions to the list and reseting it at the end. This thread will aquire an `unique_lock` before performing the 3 steps.
+
+When the dumper thread detects that all walker threads have terminated by looking into the `joinable` status it will exit the program.
 
 ### Watch for commands
 
@@ -67,7 +69,7 @@ The method `wait_command` will read input from `stdin` until a new line is recei
 
 ### Thread management
 
-C++ has abstractions to manage threads and locking mechanisms to share data between threads. This program will use `std::thread` and `std::thread::shared_mutex` to control read/write access using a combination of `shared_lock` and `exclusive_lock` for reads and write controls
+C++ has abstractions to manage threads and locking mechanisms to share data between threads. This program will use `std::thread` and `std::thread::shared_mutex` to control read/write access using a combination of `shared_lock` and `unique_lock` for reads and write controls
 
 ## Testing
 
@@ -82,4 +84,3 @@ The program will have configurable delays to be able to simulate real world use 
 ## Conclusion
 
 The `file-finder` program will use C++ STL abstractions to execute a substring search in filenames using multiple threads and proper locking and will periodically output the result and reset the container while the scanner continues to match filenames.
-
