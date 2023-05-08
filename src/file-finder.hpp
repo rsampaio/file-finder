@@ -6,6 +6,7 @@
 #include <chrono>
 #include <shared_mutex>
 #include <mutex>
+#include <cstdlib>
 
 class file_finder
 {
@@ -16,6 +17,7 @@ private:
     std::string directory;
 
     std::shared_mutex mutex_;
+    int sleep_before_dumping_in_seconds;
 
 public:
     file_finder(std::string, std::vector<std::string>);

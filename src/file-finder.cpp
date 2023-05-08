@@ -4,6 +4,12 @@ file_finder::file_finder(std::string d, std::vector<std::string> s)
 {
     directory = d;
     substrings = s;
+
+    sleep_before_dumping_in_seconds = atoi(std::getenv("SLEEP_BEFORE_DUMPING_IN_SECONDS"));
+    if (sleep_before_dumping_in_seconds == 0)
+    {
+        sleep_before_dumping_in_seconds = 1;
+    }
 }
 
 file_finder::~file_finder()
@@ -22,7 +28,7 @@ void file_finder::print_results()
 
 void file_finder::dumper()
 {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(sleep_before_dumping_in_seconds));
     if (results.size() > 0)
         print_results();
 
